@@ -6,10 +6,11 @@ plugins {
 
 android {
     namespace 'com.example.a4point6692016utils'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
-        minSdk 25
+        minSdk 26
+        targetSdk 34
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
