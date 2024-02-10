@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace 'com.example.a4point6692016utils'
+    namespace 'com.example.utils4point6692016'
     compileSdk 34
 
     defaultConfig {
