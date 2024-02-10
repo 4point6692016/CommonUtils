@@ -48,8 +48,8 @@ afterEvaluate {
                 from components.release
 
                 groupId = 'com.github.4point6692016'
-                artifactId = 'common-utils'
-                version = '0.9'
+                artifactId = 'CommonUtils'
+                version = '0.99'
             }
         }
     }
