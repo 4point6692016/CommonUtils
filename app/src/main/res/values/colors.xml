@@ -7,4 +7,21 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="primary">#2A88E3</color>
+    <color name="primaryV">#2A88E3</color>
+    <color name="okGreen">#31BD5A</color>
+    <color name="bad">#FF5050</color>
+    <color name="lightRed">#FF6D6D</color>
+    <color name="good">#00A531</color>
+    <color name="grey">#808080</color>
+    <color name="disabledGrey">#BABABA</color>
+    <color name="deletionRed">#FF5454</color>
+    <color name="deletionRedHint">#FFE0E0</color>
+    <color name="backgroundPrimaryHint">#E0F3FF</color>
+    <color name="backgroundPrimaryDarkerHint">#9CC2DA</color>
+    <color name="textHighlight">#9CDAFF</color>
+    <color name="backgroundPrimaryDarkHint">#75B5DD</color>
+    <color name="lightGrey">#E2E2E2</color>
+    <color name="darkerLightGrey">#CCCCCC</color>
+    <color name="transparent">@android:color/transparent</color>
 </resources>
