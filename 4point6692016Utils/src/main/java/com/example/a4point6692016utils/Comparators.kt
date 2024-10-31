@@ -10,8 +10,8 @@ object Comparators {
         LESS_THAN_OR_EQUAL_TO("-less than or equal to-"),
         GREATER_THAN("-greater than-"),
         GREATER_THAN_OR_EQUAL_TO("-greater than or equal to-"),
-        IS_BETWEEN("-is between-"),
-        IS_NOT_BETWEEN("-is not between-");
+        IS_IN_RANGE("-is in range-"),
+        IS_NOT_IN_RANGE("-is not in range-");
     }
 
     enum class TemporalComparators(val value: String) {
@@ -21,8 +21,8 @@ object Comparators {
         IS_ON_OR_BEFORE("-is on or before-"),
         IS_AFTER("-is after-"),
         IS_ON_OR_AFTER("-is on or after-"),
-        IS_BETWEEN("-is between-"),
-        IS_NOT_BETWEEN("-is not between-");
+        IS_IN_RANGE("-is in range-"),
+        IS_NOT_IN_RANGE("-is not in range-");
     }
 
     enum class PicklistComparators(val value: String) {
