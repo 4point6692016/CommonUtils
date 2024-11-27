@@ -9,6 +9,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="primary">#2A88E3</color>
     <color name="primaryV">#2A88E3</color>
+    <color name="homeBackground">#808080</color>
+    <color name="onPrimary">#FFFFFF</color>
+    <color name="backgroundColor">#FFFFFF</color>
     <color name="okGreen">#31BD5A</color>
     <color name="bad">#FF5050</color>
     <color name="lightRed">#FF6D6D</color>
