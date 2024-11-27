@@ -4,8 +4,3 @@ plugins {
     id 'org.jetbrains.kotlin.android' version '1.9.24' apply false
     id 'com.android.library' version '8.1.0' apply false
 }
-
-ext {
-    coreKtxVersion = "1.13.1"
-    lifecycleCompVersion = "2.8.7"
-}
