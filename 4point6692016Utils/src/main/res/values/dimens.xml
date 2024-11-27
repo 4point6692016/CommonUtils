@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="marginForViews">16dp</dimen>
+    <dimen name="tool_bar_height">56dp</dimen>
+    <dimen name="toolbar_title_text_size">18sp</dimen>
+</resources>
