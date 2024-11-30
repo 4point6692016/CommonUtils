@@ -12,6 +12,7 @@ import android.view.Window
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -258,6 +259,10 @@ object StringResources {
     const val SOMETHING_WENT_WRONG = "Something went wrong!"
 
     const val OK = "OK"
+    const val YES = "Yes"
+    const val NO = "No"
+    const val CANCEL = "Cancel"
+    const val SAVE = "Save"
 
     const val CLOSE = "CLOSE"
     const val FINISH = "FINISH"
@@ -268,6 +273,10 @@ object StringResources {
 
     const val OR = "OR"
     const val AND = "AND"
+
+    const val RECORD_PASSING_KEY = "recordPassingKey"
+
+    const val RECORD_SAVED = "Record Saved Successfully!"
 }
 
 object DateTimeUtils {
@@ -403,6 +412,12 @@ fun String.isInvalidAddSubExpression(): Boolean {
     val regex = buildString { append("^[-+]?\\d{1,9}(?:\\.\\d{1,2})?(?:(?:\\+|-)\\d{1,9}(?:\\.\\d{1,2})?)*$") }.toRegex()
     return !regex.containsMatchIn(this)
 }
+
+fun EditText.value() = text.toString()
+
+fun currentTimeInMSAsStr() = System.currentTimeMillis().toString()
+
+fun currentTimeInMS() = System.currentTimeMillis()
 
 fun String.isSingleValidOperand(): Boolean {
     return try {
