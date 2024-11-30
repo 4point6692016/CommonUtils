@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.example.a4point6692016utils
 
 import android.app.Activity
@@ -280,11 +282,6 @@ object StringResources {
 }
 
 object DateTimeUtils {
-    val locale: Locale = Locale.US
-
-    val sdf = SimpleDateFormat(StringResources.DATE_TIME_FORMAT, locale)
-
-    val dateSDF = SimpleDateFormat(StringResources.DATE_FORMAT, locale)
 
     fun currentDateAndTime(now: Long = System.currentTimeMillis()): String {
         val resultDate = Date(now)
@@ -295,8 +292,6 @@ object DateTimeUtils {
         val date = Date(now)
         return dateSDF.format(date)
     }
-
-    fun mCalendar(): Calendar = Calendar.getInstance()
 
     fun month() = mCalendar().get(Calendar.MONTH)
 
@@ -427,3 +422,8 @@ fun String.isSingleValidOperand(): Boolean {
         false
     }
 }
+
+val locale: Locale = Locale.US
+val sdf = SimpleDateFormat(StringResources.DATE_TIME_FORMAT, locale)
+val dateSDF = SimpleDateFormat(StringResources.DATE_FORMAT, locale)
+fun mCalendar(): Calendar = Calendar.getInstance()
