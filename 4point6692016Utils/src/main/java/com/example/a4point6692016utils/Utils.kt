@@ -7,6 +7,7 @@ import android.app.ActivityManager
 import android.app.AlertDialog
 import android.content.Context
 import android.content.res.Resources
+import android.database.Cursor
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
@@ -652,6 +653,8 @@ fun SearchView.onQueryChange(action: (query: String) -> Boolean) {
 fun <T> List<T>.contains(predicate: (T) -> Boolean): Boolean {
     return find(predicate) != null
 }
+
+fun Cursor.getStringFromColumn(columnName: String): String = getString(getColumnIndexOrThrow(columnName))
 
 fun getLocationOnScreen(view: View): Pair<Int, Int> {
     val outArray = IntArray(2)
