@@ -76,6 +76,7 @@ const val YES = "Yes"
 const val NO = "No"
 const val CANCEL = "Cancel"
 const val SAVE = "Save"
+const val EDIT = "Edit"
 const val JUST_NOW = "Just Now"
 const val NO_VALUE = "No Value"
 
