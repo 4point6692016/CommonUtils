@@ -50,9 +50,9 @@ import java.util.Date
 import java.util.Locale
 
 // String Resources
-const val DATE_TIME_FORMAT_24H = "MMM dd, yyyy, HH:mm:ss"
-const val DATE_TIME_FORMAT_12H = "$DATE_TIME_FORMAT_24H a"
 const val DATE_FORMAT = "MMM dd, yyyy"
+const val DATE_TIME_FORMAT_24H = "$DATE_FORMAT, HH:mm:ss"
+const val DATE_TIME_FORMAT_12H = "$DATE_FORMAT, hh:mm:ss a"
 const val TODAY = "Today"
 const val TOMORROW = "Tomorrow"
 const val YESTERDAY = "YESTERDAY"
@@ -467,13 +467,13 @@ fun runOnUiThreadWithDelay(delay: Long = 200, runnable: Runnable) {
 
 object DateTimeUtils {
 
-    fun currentDateAndTime(now: Long = System.currentTimeMillis(), shouldFetchIn12HourFormat: Boolean = false): String {
-        val resultDate = Date(now)
+    fun getDisplayableDateAndTime(timeInMS: Long = System.currentTimeMillis(), shouldFetchIn12HourFormat: Boolean = false): String {
+        val resultDate = Date(timeInMS)
         return (if (shouldFetchIn12HourFormat) sdf_12h else sdf_24h).format(resultDate)
     }
 
-    fun currentDate(now: Long = System.currentTimeMillis()): String {
-        val date = Date(now)
+    fun getDisplayableDate(timeInMS: Long = System.currentTimeMillis()): String {
+        val date = Date(timeInMS)
         return dateSDF.format(date)
     }
 
