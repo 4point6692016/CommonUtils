@@ -50,7 +50,8 @@ import java.util.Date
 import java.util.Locale
 
 // String Resources
-const val DATE_TIME_FORMAT = "MMM dd, yyyy, HH:mm:ss"
+const val DATE_TIME_FORMAT_24H = "MMM dd, yyyy, HH:mm:ss"
+const val DATE_TIME_FORMAT_12H = "$DATE_TIME_FORMAT_24H a"
 const val DATE_FORMAT = "MMM dd, yyyy"
 const val TODAY = "Today"
 const val TOMORROW = "Tomorrow"
@@ -63,10 +64,13 @@ const val WEEKS = "weeks"
 const val MINUTES = "minutes"
 const val SECONDS = "seconds"
 const val DAYS = "days"
-const val YEARS_AGO = " $YEARS ago"
-const val DAYS_AGO = " $DAYS ago"
-const val HOURS_AGO = " $HOURS ago"
-const val MIN_AGO = " $MONTHS ago"
+const val AGO = "ago"
+const val YEARS_AGO = " $YEARS $AGO"
+const val DAYS_AGO = " $DAYS $AGO"
+const val HOURS_AGO = " $HOURS $AGO"
+const val MINUTES_AGO = " $MINUTES $AGO"
+const val MONTHS_AGO = " $MONTHS $AGO"
+const val SECONDS_AGO = " $SECONDS $AGO"
 const val MILLISECONDS_IN_A_YEAR = 31536000000 // 1000 * 60 * 60 * 24 * 365
 
 const val SOMETHING_WENT_WRONG = "Something went wrong!"
@@ -84,6 +88,7 @@ const val EMPTY = ""
 const val EMPTY_SPACE = " "
 const val COMMA = ","
 const val UNDERSCORE = "_"
+const val HYPHEN = "-"
 const val PERIOD = "."
 const val ZERO_STRING = "0"
 const val PERCENTAGE = "%"
@@ -95,6 +100,8 @@ const val FALSE = "false"
 
 const val CLOSE = "CLOSE"
 const val FINISH = "FINISH"
+
+const val NONE_SYMBOL = " - "
 
 const val FILE_TIMESTAMP_FORMAT = "yyyy.MM.dd.HH.mm.ss"
 
@@ -109,7 +116,8 @@ const val RECORD_SAVED = "Record Saved Successfully!"
 
 // Others
 val locale: Locale = Locale.US
-val sdf = SimpleDateFormat(DATE_TIME_FORMAT, locale)
+val sdf_24h = SimpleDateFormat(DATE_TIME_FORMAT_24H, locale)
+val sdf_12h = SimpleDateFormat(DATE_TIME_FORMAT_12H, locale)
 val dateSDF = SimpleDateFormat(DATE_FORMAT, locale)
 fun mCalendar(): Calendar = Calendar.getInstance()
 
@@ -399,6 +407,14 @@ fun String.makeTextBold(startIndex: Int, lastIndex: Int, mode: Int = Spannable.S
     return spannableStringBuilder
 }
 
+fun String.makeBoldForHtml() = "<b>$this</b>"
+
+fun String.italicizeForHtml() = "<i>$this</i>"
+
+fun String.underlineForHtml() = "<u>$this</u>"
+
+fun String.replaceNewLinesForHtml() = replace("\n", "<br>")
+
 fun String.getFullColouredString(color: String): SpannableString {
     return getColouredString(0, length, color)
 }
@@ -451,9 +467,9 @@ fun runOnUiThreadWithDelay(delay: Long = 200, runnable: Runnable) {
 
 object DateTimeUtils {
 
-    fun currentDateAndTime(now: Long = System.currentTimeMillis()): String {
+    fun currentDateAndTime(now: Long = System.currentTimeMillis(), shouldFetchIn12HourFormat: Boolean = false): String {
         val resultDate = Date(now)
-        return sdf.format(resultDate)
+        return (if (shouldFetchIn12HourFormat) sdf_12h else sdf_24h).format(resultDate)
     }
 
     fun currentDate(now: Long = System.currentTimeMillis()): String {
@@ -678,7 +694,7 @@ fun getRelativeTermFromMilliseconds(givenTime: Long): String {
         return JUST_NOW
     }
     if ((diff / (1000 * 60)) >= 1 && (diff / (1000 * 60)) < 60) {
-        return "${(diff / (1000 * 60)).toInt()}" + MIN_AGO
+        return "${(diff / (1000 * 60)).toInt()}" + MINUTES_AGO
     }
     if ((diff / (1000 * 60 * 60)) >= 1 && (diff / (1000 * 60 * 60)) < 24) {
         return "${(diff / (1000 * 60 * 60)).toInt()}" + HOURS_AGO
