@@ -6,6 +6,7 @@ import android.app.Activity
 import android.app.ActivityManager
 import android.app.AlertDialog
 import android.content.Context
+import android.content.res.Resources
 import android.database.Cursor
 import android.graphics.Color
 import android.graphics.Typeface
@@ -44,6 +45,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.example.utils4point6692016.R
 import com.google.android.material.snackbar.Snackbar
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.text.SimpleDateFormat
@@ -82,6 +84,7 @@ const val SOMETHING_WENT_WRONG = "Something went wrong!"
 const val OK = "OK"
 const val YES = "Yes"
 const val NO = "No"
+const val DISMISS = "Dismiss"
 const val CANCEL = "Cancel"
 const val SAVE = "Save"
 const val EDIT = "Edit"
@@ -154,6 +157,8 @@ fun Context.showAlert(message: String, positiveText: String, negativeText: Strin
         this.create().show()
     }
 }
+
+fun getDetailItemLayout() = Resources.getSystem().getLayout(R.layout.detail_item_view_lib_directory)
 
 fun String.ifNotEmpty(execute: (String) -> Unit){
     if (isNotEmpty()) execute(this)
@@ -369,7 +374,7 @@ fun Context.getColour(res: Int) = resources.getColor(res, null)
 @RequiresApi(Build.VERSION_CODES.Q)
 fun Context.spanStringWithIcon(
     actualText: SpannableString,
-    replaceText: String = "", // Icon in the front
+    replaceText: String,
     @DrawableRes iconRes: Int,
     shouldIconThemeBased: Boolean = false,
     iconWidth: Int = -1,
