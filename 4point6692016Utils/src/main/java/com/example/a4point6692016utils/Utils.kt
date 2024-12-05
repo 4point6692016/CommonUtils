@@ -302,6 +302,10 @@ fun Context.getScreenWidthInPx(): Int {
     return resources.displayMetrics.widthPixels
 }
 
+fun Context.getScreenHeightInPx(): Int {
+    return resources.displayMetrics.heightPixels
+}
+
 fun Context.isDeviceNotificationDisabled(): Boolean {
     return !isDeviceNotificationEnabled()
 }
