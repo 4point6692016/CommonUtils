@@ -6,11 +6,11 @@ import android.app.Activity
 import android.app.ActivityManager
 import android.app.AlertDialog
 import android.content.Context
-import android.content.res.Resources
 import android.database.Cursor
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.text.Spannable
@@ -32,6 +32,7 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.DrawableRes
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.NotificationManagerCompat
@@ -365,13 +366,15 @@ fun Context.getDrawableRes(drawableResId: Int): Drawable? {
 
 fun Context.getColour(res: Int) = resources.getColor(res, null)
 
+@RequiresApi(Build.VERSION_CODES.Q)
 fun Context.spanStringWithIcon(
     actualText: SpannableString,
-    replaceText: String,
+    replaceText: String = "", // Icon in the front
     @DrawableRes iconRes: Int,
     shouldIconThemeBased: Boolean = false,
     iconWidth: Int = -1,
-    iconHeight: Int = -1
+    iconHeight: Int = -1,
+    iconAlignment: Int = ImageSpan.ALIGN_CENTER
 ): SpannableString {
     return this.getDrawableRes(iconRes)?.also {
         if (shouldIconThemeBased) {
@@ -383,7 +386,7 @@ fun Context.spanStringWithIcon(
             it.setBounds(0, 0, it.intrinsicHeight, it.intrinsicWidth)
         }
 
-        val imageSpan = ImageSpan(it, ImageSpan.ALIGN_BOTTOM)
+        val imageSpan = ImageSpan(it, iconAlignment)
         actualText.setSpan(
             imageSpan,
             actualText.indexOf(replaceText),
