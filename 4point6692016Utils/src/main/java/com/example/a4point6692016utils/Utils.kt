@@ -20,6 +20,7 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.ImageSpan
 import android.text.style.StyleSpan
 import android.util.DisplayMetrics
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
@@ -48,6 +49,8 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+
+lateinit var appContext: Context
 
 // String Resources
 const val DATE_FORMAT = "MMM dd, yyyy"
@@ -218,10 +221,6 @@ fun expandView(view: View, maxHeight: Int, fromHeight: Int = 1, makeVisible: Boo
     }
 }
 
-fun convertDpToPixel(dp: Int): Int {
-    return (dp * (Resources.getSystem().displayMetrics.densityDpi / 160f)).toInt()
-}
-
 fun reduceViewAlpha(view: View, alpha: Float = 0.5f, duration: Long = 300, endAction: () -> Unit = { }) {
     view.animate().alpha(alpha).setDuration(duration).withEndAction(endAction).start()
 }
@@ -246,7 +245,7 @@ fun View.compressToDeath(decrementalSteps: Int = 2, hideAndCompress: Boolean = f
 
 fun View.setHeight(height: Int, isInDp: Boolean = true) {
     val params = layoutParams
-    params.height = if (isInDp) convertDpToPixel(height) else height
+    params.height = if (isInDp) height.toFloat().convertDpToPixels() else height
     layoutParams = params
 }
 
@@ -310,7 +309,7 @@ fun Context.isDeviceNotificationEnabled(): Boolean {
 }
 
 fun getScreenDimensions(windowManager: WindowManager): Pair<Int, Int> {
-    val displayMetrics = DisplayMetrics()
+    val displayMetrics = getDisplayMetrics()
     windowManager.defaultDisplay.getMetrics(displayMetrics)
     return Pair(displayMetrics.widthPixels, displayMetrics.heightPixels)
 }
@@ -726,3 +725,31 @@ fun Long.getWeekOfDay(): String {
 fun Int.isLeapYear(): Boolean {
     return (this % 4 == 0) && ((this % 100 != 0) || (this % 400 == 0))
 }
+
+inline val Int.dp: Int
+    get() {
+        return this.toFloat().convertDpToPixels()
+    }
+
+inline val Int.sp: Int
+    get() {
+        return this.toFloat().convertSpToPixels()
+    }
+
+fun Float.convertSpToPixels(): Int {
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_SP,
+        this,
+        getDisplayMetrics()
+    ).toInt()
+}
+
+fun Float.convertDpToPixels(): Int {
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        this,
+        getDisplayMetrics()
+    ).toInt()
+}
+
+fun getDisplayMetrics(): DisplayMetrics = appContext.resources.displayMetrics
