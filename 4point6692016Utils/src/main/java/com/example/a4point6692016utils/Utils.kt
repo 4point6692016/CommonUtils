@@ -21,6 +21,7 @@ import android.text.style.ImageSpan
 import android.text.style.StyleSpan
 import android.util.DisplayMetrics
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
@@ -44,6 +45,8 @@ import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.example.utils4point6692016.R
+import com.example.utils4point6692016.databinding.DetailItemViewBinding
 import com.google.android.material.snackbar.Snackbar
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.text.SimpleDateFormat
@@ -414,6 +417,10 @@ fun String.makeTextBold(startIndex: Int, lastIndex: Int, mode: Int = Spannable.S
     return spannableStringBuilder
 }
 
+fun String.makeEntireStringBold(): SpannableStringBuilder {
+    return makeTextBold(0, length)
+}
+
 fun String.makeBoldForHtml() = "<b>$this</b>"
 
 fun String.italicizeForHtml() = "<i>$this</i>"
@@ -467,6 +474,26 @@ fun AutoCompleteTextView.configureDropDown(context: Context, arrayRes: Int, each
         }
     }
 }
+
+fun getDetailItemView(activity: Activity,
+                      dividerColor: Int = R.color.primary,
+                      labelColor: Int = R.color.grey,
+                      detailValueColor: Int = R.color.black,
+                      label: String, value: String): View {
+    return DetailItemViewBinding.inflate(activity.layoutInflater).apply {
+        labelView.apply {
+            text = label
+            setTextColor(appContext.getColor(labelColor))
+        }
+        valueView.apply {
+            text = value
+            setTextColor(appContext.getColor(detailValueColor))
+        }
+        verticalDiv.root.setBackgroundColor(appContext.getColor(dividerColor))
+    }.root
+}
+
+fun getViewFromUtil(layoutRes: Int): View = LayoutInflater.from(appContext).inflate(layoutRes, null)
 
 fun runOnUiThreadWithDelay(delay: Long = 200, runnable: Runnable) {
     Handler(Looper.getMainLooper()).postDelayed(runnable, delay)

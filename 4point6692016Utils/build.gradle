@@ -16,6 +16,10 @@ android {
         consumerProguardFiles "consumer-rules.pro"
     }
 
+    viewBinding {
+        enabled true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -73,7 +77,7 @@ afterEvaluate {
 
                 groupId = 'com.github.4point6692016'
                 artifactId = 'common-utils'
-                version = 'V_2'
+                version = 'V_2_1exp'
             }
         }
     }
