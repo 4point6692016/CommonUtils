@@ -31,6 +31,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
@@ -145,10 +146,18 @@ fun String.makeToast(context: Context, isLongToast: Boolean = false) {
     Toast.makeText(context, this, if (isLongToast) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
 }
 
+val alertDialogTheme: Int? = null
+
 fun Context.showAlert(message: String, positiveText: String, negativeText: String,
                       positiveAction: () -> Unit, negativeAction: () -> Unit,
-                      title: String = "", themeResId: Int) {
-    AlertDialog.Builder(this, themeResId).apply {
+                      title: String = "") {
+    val alertDialogBuilder = if (alertDialogTheme == null) {
+        AlertDialog.Builder(this)
+    } else {
+        AlertDialog.Builder(this, alertDialogTheme)
+    }
+
+    alertDialogBuilder.apply {
         setMessage(message)
         if (title.isNotEmpty()) {
             setTitle(title)
@@ -157,6 +166,16 @@ fun Context.showAlert(message: String, positiveText: String, negativeText: Strin
         setNegativeButton(negativeText) { _, _ -> negativeAction.invoke() }
         this.create().show()
     }
+}
+
+fun Activity.informAndFinish(message: String, title: String = "") {
+    message.ifNotEmpty {
+        showAlert(it, OK, "", positiveAction = { finish() }, {}, title = title)
+    }
+}
+
+fun Context.showInfoAlert(message: String, title: String = "") {
+    showAlert(message, OK, "", {}, {}, title)
 }
 
 fun String.ifNotEmpty(execute: (String) -> Unit){
@@ -300,6 +319,45 @@ fun String.removeSpaces(): String {
 fun String.replaceNewLineWithSpace(): String {
     return replace(NEW_LINE, EMPTY_SPACE)
 }
+
+fun <T> T?.ifNotNull(perform: (T) -> Unit) {
+    if (this != null) {
+        perform(this)
+    }
+}
+
+fun <T> List<T>?.ifNotEmpty(perform: (List<T>) -> Unit) {
+    if (!isNullOrEmpty()) {
+        perform(this)
+    }
+}
+
+fun <T> getObjectPropertiesMap(obj: T) = buildMap<String, String> {
+    var clazz: Class<*> = obj!!::class.java
+
+    while (clazz != Any::class.java) {
+        val fields = clazz.declaredFields
+
+        for (field in fields) {
+            field.isAccessible = true
+            val value = field.get(obj)
+            this[field.name] = value?.toString() ?: ""
+        }
+
+        clazz = clazz.superclass
+    }
+}
+
+fun StringBuilder.appendNewLine(): StringBuilder = append(NEW_LINE)
+
+fun StringBuilder.appendWithNewLine(strToAppend: String) {
+    append(strToAppend, NEW_LINE)
+    appendNewLine()
+}
+
+fun String.toSpannableString(): SpannableString = SpannableString(this)
+
+fun String.toBoldSpannableString(): SpannableString = SpannableString(this.makeEntireStringBold())
 
 fun Context.getScreenWidthInPx(): Int {
     return resources.displayMetrics.widthPixels
@@ -639,6 +697,8 @@ fun Boolean.ifFalse(perform: () -> Unit) {
 }
 
 fun EditText.value() = text.toString()
+
+fun TextView.value() = text.toString()
 
 fun currentTimeInMSAsStr() = System.currentTimeMillis().toString()
 
