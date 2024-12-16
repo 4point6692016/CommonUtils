@@ -76,7 +76,7 @@ afterEvaluate {
 
                 groupId = 'com.github.4point6692016'
                 artifactId = 'common-utils'
-                version = 'V_2_9'
+                version = 'V_3'
             }
         }
     }

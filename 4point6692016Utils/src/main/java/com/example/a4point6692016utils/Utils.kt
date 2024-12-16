@@ -35,6 +35,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
+import androidx.annotation.StyleRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.NotificationManagerCompat
@@ -151,7 +152,8 @@ fun String.makeToast(context: Context, isLongToast: Boolean = false) {
     Toast.makeText(context, this, if (isLongToast) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
 }
 
-val alertDialogTheme: Int? = null
+@StyleRes
+var alertDialogTheme: Int? = null
 
 fun Context.showAlert(message: String, positiveText: String, negativeText: String,
                       positiveAction: () -> Unit, negativeAction: () -> Unit,
@@ -159,7 +161,7 @@ fun Context.showAlert(message: String, positiveText: String, negativeText: Strin
     val alertDialogBuilder = if (alertDialogTheme == null) {
         AlertDialog.Builder(this)
     } else {
-        AlertDialog.Builder(this, alertDialogTheme)
+        AlertDialog.Builder(this, alertDialogTheme!!)
     }
 
     alertDialogBuilder.apply {
