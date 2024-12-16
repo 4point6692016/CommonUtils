@@ -46,10 +46,11 @@ import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.example.utils4point6692016.R
-import com.example.utils4point6692016.databinding.DetailItemViewBinding
+//import com.example.utils4point6692016.R
+//import com.example.utils4point6692016.databinding.DetailItemViewBinding
 import com.google.android.material.snackbar.Snackbar
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -82,6 +83,8 @@ const val SECONDS_AGO = " $SECONDS $AGO"
 const val MILLISECONDS_IN_A_YEAR = 31536000000 // 1000 * 60 * 60 * 24 * 365
 
 const val SOMETHING_WENT_WRONG = "Something went wrong!"
+const val ERROR_OCCURRED = "Error occurred"
+const val CONTACT_DEV = "Contact Developer"
 
 const val OK = "OK"
 const val YES = "Yes"
@@ -115,6 +118,8 @@ const val NONE_SYMBOL = " - "
 const val FILE_TIMESTAMP_FORMAT = "yyyy.MM.dd.HH.mm.ss"
 
 const val RUPEE_SYMBOL = "₹"
+const val UP_ARROW = "↑"
+const val DOWN_ARROW = "↓"
 
 const val OR = "OR"
 const val AND = "AND"
@@ -533,23 +538,24 @@ fun AutoCompleteTextView.configureDropDown(context: Context, arrayRes: Int, each
     }
 }
 
-fun getDetailItemView(activity: Activity,
-                      dividerColor: Int = R.color.primary,
-                      labelColor: Int = R.color.grey,
-                      detailValueColor: Int = R.color.black,
-                      label: String, value: String): View {
-    return DetailItemViewBinding.inflate(activity.layoutInflater).apply {
-        labelView.apply {
-            text = label
-            setTextColor(appContext.getColor(labelColor))
-        }
-        valueView.apply {
-            text = value
-            setTextColor(appContext.getColor(detailValueColor))
-        }
-        verticalDiv.root.setBackgroundColor(appContext.getColor(dividerColor))
-    }.root
-}
+// todo to confirm if this worked
+//fun getDetailItemView(activity: Activity,
+//                      dividerColor: Int = R.color.primary,
+//                      labelColor: Int = R.color.grey,
+//                      detailValueColor: Int = R.color.black,
+//                      label: String, value: String): View {
+//    return DetailItemViewBinding.inflate(activity.layoutInflater).apply {
+//        labelView.apply {
+//            text = label
+//            setTextColor(appContext.getColor(labelColor))
+//        }
+//        valueView.apply {
+//            text = value
+//            setTextColor(appContext.getColor(detailValueColor))
+//        }
+//        verticalDiv.root.setBackgroundColor(appContext.getColor(dividerColor))
+//    }.root
+//}
 
 fun getViewFromUtil(layoutRes: Int): View = LayoutInflater.from(appContext).inflate(layoutRes, null)
 
@@ -700,6 +706,10 @@ fun EditText.value() = text.toString()
 
 fun TextView.value() = text.toString()
 
+fun EditText.trimmedValue() = value().trim()
+
+fun TextView.trimmedValue() = value().trim()
+
 fun currentTimeInMSAsStr() = System.currentTimeMillis().toString()
 
 fun currentTimeInMS() = System.currentTimeMillis()
@@ -747,6 +757,11 @@ fun ViewPager2.expandScreenItemHack(recyclerView: RecyclerView?): ViewPager2.OnP
     }
     registerOnPageChangeCallback(listener)
     return listener
+}
+
+fun FileOutputStream.flushAndClose() {
+    flush()
+    close()
 }
 
 fun SearchView.onQueryChange(action: (query: String) -> Boolean) {
