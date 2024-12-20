@@ -2,15 +2,20 @@
 
 package com.example.a4point6692016utils
 
+import android.animation.LayoutTransition
 import android.app.Activity
 import android.app.ActivityManager
 import android.app.AlertDialog
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
 import android.database.Cursor
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.text.Spannable
@@ -51,6 +56,7 @@ import androidx.viewpager2.widget.ViewPager2
 //import com.example.utils4point6692016.databinding.DetailItemViewBinding
 import com.google.android.material.snackbar.Snackbar
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
+import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -92,6 +98,9 @@ const val YES = "Yes"
 const val NO = "No"
 const val DISMISS = "Dismiss"
 const val CANCEL = "Cancel"
+const val CHOOSE = "Choose"
+const val PROCEED = "Proceed"
+const val WARNING = "Warning"
 const val SAVE = "Save"
 const val EDIT = "Edit"
 const val JUST_NOW = "Just Now"
@@ -148,41 +157,51 @@ fun View.makeGone() {
     visibility = View.GONE
 }
 
-fun String.makeToast(context: Context, isLongToast: Boolean = false) {
-    Toast.makeText(context, this, if (isLongToast) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
+fun String.makeToast(isLongToast: Boolean = false) {
+    Toast.makeText(appContext, this, if (isLongToast) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
 }
 
 @StyleRes
 var alertDialogTheme: Int? = null
 
 fun Context.showAlert(message: String, positiveText: String, negativeText: String,
-                      positiveAction: () -> Unit, negativeAction: () -> Unit,
-                      title: String = "") {
+                      positiveAction: () -> Unit = {}, negativeAction: () -> Unit = {},
+                      title: String = ""): AlertDialog {
     val alertDialogBuilder = if (alertDialogTheme == null) {
         AlertDialog.Builder(this)
     } else {
         AlertDialog.Builder(this, alertDialogTheme!!)
     }
 
-    alertDialogBuilder.apply {
+    val dialog = alertDialogBuilder.apply {
         setMessage(message)
         if (title.isNotEmpty()) {
             setTitle(title)
         }
         setPositiveButton(positiveText) { _, _ -> positiveAction.invoke() }
         setNegativeButton(negativeText) { _, _ -> negativeAction.invoke() }
-        this.create().show()
-    }
+    }.create()
+    
+    dialog.show()
+    return dialog
 }
 
 fun Activity.informAndFinish(message: String, title: String = "") {
     message.ifNotEmpty {
-        showAlert(it, OK, "", positiveAction = { finish() }, {}, title = title)
+        showAlert(it, OK, "", positiveAction = { finish() }, title = title)
     }
 }
 
+fun LinearLayout.enableTransition() {
+    layoutTransition = LayoutTransition()
+}
+
+fun LinearLayout.disableTransition() {
+    layoutTransition = null
+}
+
 fun Context.showInfoAlert(message: String, title: String = "") {
-    showAlert(message, OK, "", {}, {}, title)
+    showAlert(message, OK, "", {}, title = title)
 }
 
 fun String.ifNotEmpty(execute: (String) -> Unit){
@@ -272,6 +291,12 @@ fun View.compressToDeath(decrementalSteps: Int = 2, hideAndCompress: Boolean = f
         setHeight(height - decrementalSteps, false)
         compressToDeath(decrementalSteps)
     }
+}
+
+fun RecyclerView.configure(rvAdapter: RecyclerView.Adapter<*>, hasFixedSize: Boolean = false) {
+    adapter = rvAdapter
+    setHasFixedSize(hasFixedSize)
+    layoutManager = LinearLayoutManager(appContext)
 }
 
 fun View.setHeight(height: Int, isInDp: Boolean = true) {
@@ -784,6 +809,35 @@ fun <T> List<T>.contains(predicate: (T) -> Boolean): Boolean {
 
 fun Cursor.getStringFromColumn(columnName: String): String = getString(getColumnIndexOrThrow(columnName))
 
+fun Cursor.getValueOrNullFromCursor(columnName: String): String? {
+    return getStringFromColumn(columnName).ifEmpty { null }
+}
+
+fun openWhatsAppContactOrDefaultDialer(phoneNumber: String) {
+    try {
+        openWhatsAppContact(phoneNumber)
+    } catch (e: ActivityNotFoundException) { // WhatsApp not installed
+        openDefaultPhoneDialer(phoneNumber)
+    }
+}
+
+fun openWhatsAppContact(phoneNumber: String) {
+    appContext.startActivity(
+        Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse("https://wa.me/$phoneNumber")
+            `package` = "com.whatsapp"
+        }
+    )
+}
+
+fun openDefaultPhoneDialer(phoneNumber: String) {
+    appContext.startActivity(
+        Intent(Intent.ACTION_DIAL).apply {
+            data = Uri.parse("tel:$phoneNumber")
+        }
+    )
+}
+
 fun getLocationOnScreen(view: View): Pair<Int, Int> {
     val outArray = IntArray(2)
     view.getLocationOnScreen(outArray)
@@ -865,3 +919,5 @@ fun Float.convertDpToPixels(): Int {
 }
 
 fun getDisplayMetrics(): DisplayMetrics = appContext.resources.displayMetrics
+
+val downloadsDirectory: File = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
