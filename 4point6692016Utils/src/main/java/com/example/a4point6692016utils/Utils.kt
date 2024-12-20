@@ -921,3 +921,9 @@ fun Float.convertDpToPixels(): Int {
 fun getDisplayMetrics(): DisplayMetrics = appContext.resources.displayMetrics
 
 val downloadsDirectory: File = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+
+fun hasAllFilesAccess() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+    Environment.isExternalStorageManager()
+} else {
+    true
+}
