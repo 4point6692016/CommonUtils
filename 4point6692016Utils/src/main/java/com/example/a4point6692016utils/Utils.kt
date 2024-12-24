@@ -52,9 +52,12 @@ import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.example.utils4point6692016.R
 //import com.example.utils4point6692016.R
 //import com.example.utils4point6692016.databinding.DetailItemViewBinding
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.io.File
 import java.io.FileOutputStream
@@ -98,6 +101,8 @@ const val YES = "Yes"
 const val NO = "No"
 const val DISMISS = "Dismiss"
 const val CANCEL = "Cancel"
+const val DELETE = "Delete"
+const val CLEAR = "Clear"
 const val CHOOSE = "Choose"
 const val PROCEED = "Proceed"
 const val WARNING = "Warning"
@@ -536,6 +541,10 @@ fun getSpannedStringForMandatoryField(value: String): SpannableString {
     return spannableString
 }
 
+fun String.getRupeePrefixedStr(): String {
+    return "$RUPEE_SYMBOL$this"
+}
+
 fun String.getTextToHighlight(searchQuery: String): String {
     val indexOfSearchQuery = indexOf(searchQuery, ignoreCase = true)
     return if (indexOfSearchQuery > -1) {
@@ -547,9 +556,18 @@ fun String.getTextToHighlight(searchQuery: String): String {
     }
 }
 
-fun AutoCompleteTextView.configureDropDown(context: Context, arrayRes: Int, eachDropDownItemRes: Int, onTextChanged: ((String) -> Unit)? = null) {
-    val array = context.resources.getStringArray(arrayRes)
-    val arrayAdapter = ArrayAdapter(context, eachDropDownItemRes, array)
+fun <T> getEntityListFromJsonString(jsonDataString: String): List<T> {
+    return try {
+        val type = object : TypeToken<List<T?>?>() {}.type
+        Gson().fromJson(jsonDataString, type)
+    } catch (_: Exception) {
+        listOf()
+    }
+}
+
+fun AutoCompleteTextView.configureDropDown(arrayRes: Int, eachDropDownItemRes: Int = R.layout.each_drop_down_item_view, onTextChanged: ((String) -> Unit)? = null) {
+    val array = appContext.resources.getStringArray(arrayRes)
+    val arrayAdapter = ArrayAdapter(appContext, eachDropDownItemRes, array)
     apply {
         setText(arrayAdapter.getItem(0))
         setAdapter(arrayAdapter)
