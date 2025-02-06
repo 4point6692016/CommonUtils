@@ -565,11 +565,11 @@ fun <T> getEntityListFromJsonString(jsonDataString: String): List<T> {
     }
 }
 
-fun AutoCompleteTextView.configureDropDown(arrayRes: Int, eachDropDownItemRes: Int = R.layout.each_drop_down_item_view, onTextChanged: ((String) -> Unit)? = null) {
+fun AutoCompleteTextView.configureDropDown(arrayRes: Int, eachDropDownItemRes: Int = R.layout.each_drop_down_item_view, onTextChanged: ((String) -> Unit)? = null, defaultItemPosition: Int = 0) {
     val array = appContext.resources.getStringArray(arrayRes)
     val arrayAdapter = ArrayAdapter(appContext, eachDropDownItemRes, array)
     apply {
-        setText(arrayAdapter.getItem(0))
+        setText(arrayAdapter.getItem(defaultItemPosition))
         setAdapter(arrayAdapter)
         onTextChanged?.let { onTxtChanged ->
             val textChangedListenerAddedTag = "textChangedListenerAddedTag"
